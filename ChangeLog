@@ -1,4 +1,8 @@
 CHANGES
 =======
 
+* Fix the packaging
+* Add the Read the docs badge to the README.rst file
+* Add the requires.io badge to the README.rst file
+* Final things before commit
 * First commit
