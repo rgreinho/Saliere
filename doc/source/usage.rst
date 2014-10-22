@@ -1,6 +1,30 @@
 Usage
 =====
 
+Synopsis
+--------
+
+Create a skeleton for your formula.
+
+Usage::
+
+    $ saliere [options] formula
+
+Mandatory positional arguments::
+
+    formula         the name of the formula
+
+Optional arguments::
+
+    -h, --help      show this help message and exit
+    -t TEMPLATE, --template TEMPLATE
+                    specifies the path of a jinja template
+    -o OUTPUT, --output OUTPUT
+                    output directory (default is the current directory)
+
+Examples
+--------
+
 To simply create a formula in the current directory using the standard template::
 
 $ saliere.py mysql

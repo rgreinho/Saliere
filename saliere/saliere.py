@@ -68,7 +68,7 @@ def jinjanize(jinja_env, template_file, formula_name):
     """Renders a Jinja2 template.
 
     :param jinja_env: the jinja environment
-    :param template_file: the full path of the template file
+    :param template_file: the full path of the template file to render
     :param formula_name: the name of the formula
     :return: a string representing the rendered template
     """
@@ -105,10 +105,19 @@ if __name__ == '__main__':
     # Parse the arguments
     args = parser.parse_args()
 
-    # Ensure the template exists
-    if not os.path.exists(args.template):
+    template_folder = args.template
+
+    # Look for the template in the current directory
+    template_exists = os.path.exists(template_folder)
+
+    # Look for the template in /usr/local/share/saliere/templates
+    if not template_exists:
+        template_folder = os.path.join('/usr/local/share/saliere/templates', args.template)
+        template_exists = os.path.exists(template_folder)
+
+    if not template_exists:
         print("The template name you specified does not exist.")
         exit(1)
 
     # Call the main function
-    main(args.template, args.formula, args.output)
+    main(template_folder, args.formula, args.output)
