@@ -1,0 +1,7 @@
+{{'{%'}} set {{formula_name}} = salt['grains.filter_by']({
+    'default': {
+        'pkg': '{{formula_name}}',
+        'service': '{{formula_name}}',
+        'config': '/etc/{{formula_name}}.conf',
+    },
+}, merge=salt['pillar.get']('{{formula_name}}:lookup')) {{'%}'}}
