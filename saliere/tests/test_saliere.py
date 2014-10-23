@@ -5,7 +5,7 @@ from unittest.mock import MagicMock
 import jinja2
 
 from saliere.saliere import jinjanize
-from saliere.saliere import main
+from saliere.saliere import process
 
 
 class TestJinjan(unittest.TestCase):
@@ -25,14 +25,14 @@ class TestJinjan(unittest.TestCase):
         self.assertEqual(jinjanized_content, "MagickMock is the best")
 
 
-class TestMain(unittest.TestCase):
-    def test_main(self):
+class TestProcess(unittest.TestCase):
+    def test_process(self):
         formula_name = "UnitTest"
         template = "template-formula"
         tmp_dir = tempfile.TemporaryDirectory()
         output_dir = tmp_dir.name
 
-        main(template, formula_name, output_dir)
+        process(template, formula_name, output_dir)
 
         self.assertTrue(True)
 

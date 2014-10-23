@@ -28,7 +28,7 @@ def create_folder(folder, on_failure=None):
             on_failure()
 
 
-def main(template_path, formula_name, output_dir):
+def process(template_path, formula_name, output_dir):
     """Main function.
 
     :param template_path: the path of the template to use
@@ -85,7 +85,7 @@ def jinjanize(jinja_env, template_file, formula_name):
     return template.render(template_vars)
 
 
-if __name__ == '__main__':
+def main():
     # Create the parser
     parser = argparse.ArgumentParser(description="Create a skeleton for your formula.")
     parser.add_argument("formula", help="the name of your formula")
@@ -120,4 +120,7 @@ if __name__ == '__main__':
         exit(1)
 
     # Call the main function
-    main(template_folder, args.formula, args.output)
+    process(template_folder, args.formula, args.output)
+
+if __name__ == '__main__':
+    main()

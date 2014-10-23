@@ -32,3 +32,8 @@ To build the documentation::
     $ python setup.py build_sphinx
 
 And then browse to doc/build/html/index.html
+
+Contribute
+----------
+
+The repository is located on Github: https://github.com/TeamLovely/Saliere.
