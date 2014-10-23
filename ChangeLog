@@ -1,6 +1,14 @@
 CHANGES
 =======
 
+0.1.2
+-----
+
+* Fix a bug related to the output directory
+
+0.1.1
+-----
+
 * Fix the packaging
 * Update the documentation
 

@@ -36,7 +36,7 @@ def process(template_path, formula_name, output_dir):
     :param output_dir: the path of the output directory
     """
     # Prepare directories
-    template_folder_parent = os.path.abspath(os.path.dirname(template_path))
+    template_folder_parent = os.path.abspath(os.path.dirname(template_path)) + "/"
     output_folder_root = os.path.abspath(output_dir)
 
     # List of the files in the template folder

@@ -28,7 +28,7 @@ class TestJinjan(unittest.TestCase):
 class TestProcess(unittest.TestCase):
     def test_process(self):
         formula_name = "UnitTest"
-        template = "template-formula"
+        template = "/usr/local/share/saliere/templates/template-formula"
         tmp_dir = tempfile.TemporaryDirectory()
         output_dir = tmp_dir.name
 
