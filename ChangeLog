@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+0.1
+---
+
+* Enforce unicode strings in the Sphinx configuration
+* Update the .gitgnore file
 * Fix the packaging
 * Add the Read the docs badge to the README.rst file
 * Add the requires.io badge to the README.rst file

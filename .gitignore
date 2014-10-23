@@ -3,3 +3,5 @@ doc/build/
 __pycache__
 .tox
 saliere.egg-info/
+build
+dist

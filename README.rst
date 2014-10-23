@@ -11,7 +11,24 @@ Salière
 
 Salière is a tool giving devops the ability to easily generate a skeleton for a Salt formula.
 
-Docs
-----
+Install
+-------
 
-To build the documentation, install sphinx (pip install sphinx), run python setup.py build_sphinx, and then browse to doc/build/html/index.html
+Using pip::
+
+    $ pip install saliere
+
+Read the docs
+-------------
+
+The latest documentation is published on Read the Docs: http://saliere.readthedocs.org.
+
+Build the docs
+--------------
+
+To build the documentation::
+
+    $ pip install sphinx
+    $ python setup.py build_sphinx
+
+And then browse to doc/build/html/index.html
