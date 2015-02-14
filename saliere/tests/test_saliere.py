@@ -4,14 +4,15 @@ from unittest.mock import MagicMock
 
 import jinja2
 
-from saliere.saliere import jinjanize
-from saliere.saliere import process
+from saliere.templatizer import Jinjanizer
+from saliere.templatizer import Templatizer
 
 
-class TestJinjan(unittest.TestCase):
+class TestTemplatizer(unittest.TestCase):
     def test_jinjanize(self):
         # Prepare the test template
         template_str = "{{ formula_name }} is the best"
+        template_vars = { "formula_name": "MagickMock" }
 
         # Prepare the jinja environment
         template_loader = jinja2.FileSystemLoader("")
@@ -19,20 +20,19 @@ class TestJinjan(unittest.TestCase):
         jinja_env.get_template = MagicMock(return_value=jinja_env.from_string(template_str))
 
         # Jinjanize the content
-        jinjanized_content = jinjanize(jinja_env, "", "MagickMock")
+        jinjanized_content = Jinjanizer.jinjanize(jinja_env, "", template_vars)
 
         # Assert
         self.assertEqual(jinjanized_content, "MagickMock is the best")
 
-
-class TestProcess(unittest.TestCase):
-    def test_process(self):
+    def test_copy(self):
         formula_name = "UnitTest"
-        template = "/usr/local/share/saliere/templates/template-formula"
+        type = "salt-formula"
         tmp_dir = tempfile.TemporaryDirectory()
         output_dir = tmp_dir.name
+        t = Templatizer(template_type=type)
 
-        process(template, formula_name, output_dir)
+        t.copy(formula_name, output_dir)
 
         self.assertTrue(True)
 

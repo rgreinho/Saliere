@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+* Refactor the saliere module
+* Reorganize code and template structure
+* Update the requirements
+
 0.1.2
 -----
 
