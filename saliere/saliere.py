@@ -1,11 +1,12 @@
 #!/usr/bin/python3
-"""Create a salt formula skeleton based on Jinja2 templates.
+"""Creates a skeleton for various projects based on Jinja2 templates.
 
 Example:
 
-    $ saliere.py mysql
-    $ saliere.py mysql -t my-new-amazing-template
-    $ saliere.py mysql -t my-new-amazing-template -o my-formula-directory
+    $ saliere.py mysql -t salt-formula
+    $ saliere.py mysql-django -t django
+    $ saliere.py mysql -t salt-formula -o my-formula-directory
+    $ saliere.py mysql -t ~/my/custom/template -o my-template-directory
 """
 
 import argparse
@@ -13,6 +14,9 @@ from datetime import date
 import os
 
 import jinja2
+
+# Define a list of valid paths to look for the templates
+template_path_list = ['../templates', '/usr/local/share/saliere/templates']
 
 
 def create_folder(folder, on_failure=None):
@@ -29,14 +33,16 @@ def create_folder(folder, on_failure=None):
 
 
 def process(template_path, formula_name, output_dir):
-    """Main function.
+    """Creates the skeleton based on the chosen template.
 
     :param template_path: the path of the template to use
     :param formula_name: the name of the formula
     :param output_dir: the path of the output directory
     """
-    # Prepare directories
+    # Ensure the template path ends with a "/".
     template_folder_parent = os.path.abspath(os.path.dirname(template_path)) + "/"
+
+    # Prepare the output directory
     output_folder_root = os.path.abspath(output_dir)
 
     # List of the files in the template folder
@@ -85,15 +91,84 @@ def jinjanize(jinja_env, template_file, formula_name):
     return template.render(template_vars)
 
 
+class Templatizer:
+
+    def __init__(self, template_path_list=[]):
+        """Initializer.
+
+        :param template_path_list: the list of paths where the templates are possibly located
+        """
+        self.template_path_list = template_path_list
+
+    def locate_template(self,template_type):
+        """Returns the path of a template.
+
+        Given a template type the function will attempt to retrieve its full path. If instead of a template type, a
+        full path is given, the function will validate the full path, If the full path cannot be determined, the
+        function returns None.
+
+        :param template_type: the type of the template or its full path
+        :return: the path of the template or None if it does not exist
+        """
+        # Ensure we have a template type.
+        if not template_type:
+            return None
+
+        # Ensure we have a list of paths.
+        if not self.template_path_list:
+            return None
+
+        # Go through the list of valid paths.
+        for path in self.template_path_list:
+            base_path = os.path.abspath(path)
+            template_path = os.path.join(base_path, template_type)
+            is_valid = os.path.exists(template_path)
+            if is_valid:
+                break
+
+        # Return the full path of the given template or None if it cannot be found.
+        return os.path.abspath(template_path) if is_valid else None
+
+
+    def list_templates(self):
+        """Returns a list of available templates ordered alphabetically.
+
+        :return: a list of available templates ordered alphabetically
+        """
+        # Ensure we have a list of paths.
+        if not self.template_path_list:
+            return None
+
+        # Initialize an empty set of available templates.
+        available_templates = set()
+
+        # Go through the list of valid paths.
+        for path in self.template_path_list:
+            base_path = os.path.abspath(path)
+            try:
+                subdirs = os.listdir(base_path)
+                available_templates.update(subdirs)
+            except FileNotFoundError:
+                pass
+
+        # Return a list of available templates ordered alphabetically
+        return sorted(available_templates)
+
+
 def main():
-    # Create the parser
+    # Create the parser.
     parser = argparse.ArgumentParser(description="Create a skeleton for your formula.")
-    parser.add_argument("formula", help="the name of your formula")
+
+    # Create the options.
+    parser.add_argument(
+        "-n",
+        "--name",
+        help="the name of your project",
+        type=str)
     parser.add_argument(
         "-t",
-        "--template",
-        default="template-formula",
-        help="specifies the path of a jinja template",
+        "--type",
+        help="the type of your template or the path of a jinja template",
         type=str)
     parser.add_argument(
         "-o",
@@ -101,26 +176,36 @@ def main():
         default=os.getcwd(),
         help="output directory (default is the current directory)",
         type=str)
+    parser.add_argument(
+        "-l",
+        "--list",
+        action="store_true",
+        help="list the available templates")
 
-    # Parse the arguments
+    # Parse the arguments.
     args = parser.parse_args()
 
-    template_folder = args.template
+    # Create the templetizer object.
+    templatizer = Templatizer(template_path_list)
 
-    # Look for the template in the current directory
-    template_exists = os.path.exists(template_folder)
+    # List the templates if asked to.
+    if args.list:
+        print("Available templates: \n\t" + "\n\t".join(templatizer.list_templates()))
+        exit(0)
 
-    # Look for the template in /usr/local/share/saliere/templates
-    if not template_exists:
-        template_folder = os.path.join('/usr/local/share/saliere/templates', args.template)
-        template_exists = os.path.exists(template_folder)
+    # Ensure the project name and project type are specified.
+    if not args.name or not args.type:
+        print("The template type and project name are required: -t type -n name.")
+        exit(1)
 
-    if not template_exists:
+    # Retrieve the template type.
+    template_path = templatizer.locate_template(args.type)
+    if not template_path:
         print("The template name you specified does not exist.")
         exit(1)
 
-    # Call the main function
-    process(template_folder, args.formula, args.output)
+    # Call the process function
+    process(template_path, args.name, args.output)
 
 if __name__ == '__main__':
     main()
