@@ -1,1 +1,5 @@
 Jinja2==2.7.3
+pbr
+PyYAML==3.11
+Sphinx==1.2.3
+wheel
