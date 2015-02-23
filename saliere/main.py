@@ -12,6 +12,7 @@ Example:
 import argparse
 import os
 
+from saliere.config import Config
 from saliere.templatizer import Templatizer
 
 # Define a list of valid paths to look for the templates
@@ -28,7 +29,7 @@ def main():
     parser.add_argument("-o", "--output", default=os.getcwd(),
                         help="output directory (default is the current directory)", type=str)
     parser.add_argument("-l", "--list", action="store_true", help="list the available templates")
-    parser.add_argument("-c", "--config-file", default='config.yml',
+    parser.add_argument("-c", "--configfile", default='config.yml',
                         help="file containing the template information (default: config.yml)", type=str)
 
     # Parse the arguments.
@@ -53,9 +54,16 @@ def main():
         print("The template name you specified does not exist.")
         exit(1)
 
-    # Call the process function
+    # Get the project type
     t.template_type = args.type
-    t.copy(args.name, args.output)
+
+    # Load the template variables, if any, from the configuration file.
+    config = Config()
+    config.load_from_file(args.configfile)
+    template_vars = config.get_value(args.type)
+
+    # Call the copy function.
+    t.copy(args.name, args.output, template_vars)
 
 
 if __name__ == '__main__':

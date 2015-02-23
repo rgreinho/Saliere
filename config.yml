@@ -5,6 +5,6 @@ common:
         - '../templates'
         - '/usr/local/share/saliere/templates'
 salt-formula:
-    formula_name: formula_name
-    today: !!python/object:date.today().isoformat()
+    formula_name: my-salt-formula
+    today: 2015-02-22
 
