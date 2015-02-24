@@ -31,6 +31,7 @@ def main():
     parser.add_argument("-l", "--list", action="store_true", help="list the available templates")
     parser.add_argument("-c", "--configfile", default='config.yml',
                         help="file containing the template information (default: config.yml)", type=str)
+    parser.add_argument("--var", default=None, help="template values", type=str)
 
     # Parse the arguments.
     args = parser.parse_args()
@@ -57,10 +58,17 @@ def main():
     # Get the project type
     t.template_type = args.type
 
+    # Load the template variables, if any, from the command line.
+    if args.var:
+        vars_split = args.var.split('|')
+        vars_list = [v.split('=', 1) for v in vars_split if '=' in v]
+        template_vars = dict(vars_list)
+
     # Load the template variables, if any, from the configuration file.
-    config = Config()
-    config.load_from_file(args.configfile)
-    template_vars = config.get_value(args.type)
+    else:
+        config = Config()
+        config.load_from_file(args.configfile)
+        template_vars = config.get_value(args.type)
 
     # Call the copy function.
     t.copy(args.name, args.output, template_vars)
