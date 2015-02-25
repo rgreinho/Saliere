@@ -1,6 +1,9 @@
 CHANGES
 =======
 
+* Add unittests for the Templatizer module
+* Add the ability to get template variables from the CLI
+* Add configuration file support
 * Refactor the saliere module
 * Reorganize code and template structure
 * Update the requirements
