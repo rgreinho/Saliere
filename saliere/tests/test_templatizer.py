@@ -69,22 +69,19 @@ class TestTemplatizer(unittest.TestCase):
         self.assertEqual(jinjanized_content, " is the best")
 
     def test_copy(self):
-        """Copies the template folder hierarchy without any jinja processing.
-        """
+        """Copies the template folder hierarchy without any jinja processing."""
         formula_name = "UnitTest"
         type = "salt-formula"
-        tmp_dir = tempfile.TemporaryDirectory()
-        output_dir = tmp_dir.name
-        t = Templatizer(template_type=type)
-
-        t.copy(formula_name, output_dir)
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            output_dir = tmp_dir
+            t = Templatizer(template_type=type)
+            t.copy(formula_name, output_dir)
 
         self.assertTrue(True)
 
     @patch('os.path.exists', MagicMock(return_value=True))
     def test_locate_template_00(self):
-        """Locates an existing template.
-        """
+        """Locates an existing template."""
         custom_template_location = "/home/python/test/custom_template"
         t = Templatizer(template_type=custom_template_location)
         template_location = t.locate_template()
@@ -93,8 +90,7 @@ class TestTemplatizer(unittest.TestCase):
 
     @patch('os.path.exists', MagicMock(return_value=False))
     def test_locate_template_01(self):
-        """Locates a template with an invalid path.
-        """
+        """Locates a template with an invalid path. """
         custom_template_location = "/home/python/test/custom_template"
         t = Templatizer(template_type=custom_template_location)
         template_location = t.locate_template()
@@ -102,8 +98,7 @@ class TestTemplatizer(unittest.TestCase):
         self.assertIsNone(template_location)
 
     def test_list_templates_00(self):
-        """Lists the available templates on the system.
-        """
+        """Lists the available templates on the system."""
         custom_template_list = ["project1", "custom-template", "project2"]
 
         with patch('os.listdir', MagicMock(return_value=custom_template_list)):
