@@ -1,0 +1,10 @@
+common:
+    # Template location. Default values are 'templates', '../templates' and '/usr/local/share/saliere/templates'
+    template_path:
+        - 'templates'
+        - '../templates'
+        - '/usr/local/share/saliere/templates'
+salt-formula:
+    formula_name: my-salt-formula
+    today: 2015-02-22
+
