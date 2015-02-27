@@ -10,6 +10,10 @@ from saliere.templatizer import Templatizer
 
 
 class TestTemplatizer(unittest.TestCase):
+    def setUp(self):
+        self.template_loader = jinja2.FileSystemLoader("")
+        self.jinja_env = jinja2.Environment(loader=self.template_loader)
+
     def test_jinjanize_00(self):
         """Renders a regular template.
 
@@ -17,33 +21,28 @@ class TestTemplatizer(unittest.TestCase):
         """
         # Prepare the test template
         template_str = "{{ formula_name }} is the best"
-        template_vars = { "formula_name": "MagickMock" }
+        template_vars = {"formula_name": "MagickMock"}
 
         # Prepare the jinja environment
-        template_loader = jinja2.FileSystemLoader("")
-        jinja_env = jinja2.Environment(loader=template_loader)
-        jinja_env.get_template = MagicMock(return_value=jinja_env.from_string(template_str))
+        self.jinja_env.get_template = MagicMock(return_value=self.jinja_env.from_string(template_str))
 
         # Jinjanize the content
-        jinjanized_content = Jinjanizer.jinjanize(jinja_env, "", template_vars)
+        jinjanized_content = Jinjanizer.jinjanize(self.jinja_env, "", template_vars)
 
         # Assert
         self.assertEqual(jinjanized_content, "MagickMock is the best")
 
     def test_jinjanize_01(self):
-        """Renders a template which does not contains any variable.
-        """
+        """Renders a template which does not contains any variable."""
         # Prepare the test template
         template_str = "Saliere is the best"
         template_vars = None
 
         # Prepare the jinja environment
-        template_loader = jinja2.FileSystemLoader("")
-        jinja_env = jinja2.Environment(loader=template_loader)
-        jinja_env.get_template = MagicMock(return_value=jinja_env.from_string(template_str))
+        self.jinja_env.get_template = MagicMock(return_value=self.jinja_env.from_string(template_str))
 
         # Jinjanize the content
-        jinjanized_content = Jinjanizer.jinjanize(jinja_env, "", template_vars)
+        jinjanized_content = Jinjanizer.jinjanize(self.jinja_env, "", template_vars)
 
         # Assert
         self.assertEqual(jinjanized_content, template_str)
@@ -58,12 +57,10 @@ class TestTemplatizer(unittest.TestCase):
         template_vars = None
 
         # Prepare the jinja environment
-        template_loader = jinja2.FileSystemLoader("")
-        jinja_env = jinja2.Environment(loader=template_loader)
-        jinja_env.get_template = MagicMock(return_value=jinja_env.from_string(template_str))
+        self.jinja_env.get_template = MagicMock(return_value=self.jinja_env.from_string(template_str))
 
         # Jinjanize the content
-        jinjanized_content = Jinjanizer.jinjanize(jinja_env, "", template_vars)
+        jinjanized_content = Jinjanizer.jinjanize(self.jinja_env, "", template_vars)
 
         # Assert
         self.assertEqual(jinjanized_content, " is the best")
@@ -71,10 +68,10 @@ class TestTemplatizer(unittest.TestCase):
     def test_copy(self):
         """Copies the template folder hierarchy without any jinja processing."""
         formula_name = "UnitTest"
-        type = "salt-formula"
+        template_type = "salt-formula"
         with tempfile.TemporaryDirectory() as tmp_dir:
             output_dir = tmp_dir
-            t = Templatizer(template_type=type)
+            t = Templatizer(template_type=template_type)
             t.copy(formula_name, output_dir)
 
         self.assertTrue(True)

@@ -58,17 +58,19 @@ def main():
     # Get the project type
     t.template_type = args.type
 
+    # Load the template variables, if any, from the configuration file.
+    config = Config()
+    config.load_from_file(args.configfile)
+    template_vars = config.get_value(args.type)
+
     # Load the template variables, if any, from the command line.
     if args.var:
         vars_split = args.var.split('|')
         vars_list = [v.split('=', 1) for v in vars_split if '=' in v]
-        template_vars = dict(vars_list)
+        cli_template_vars = dict(vars_list)
 
-    # Load the template variables, if any, from the configuration file.
-    else:
-        config = Config()
-        config.load_from_file(args.configfile)
-        template_vars = config.get_value(args.type)
+        # And override the values from the config file with the values from the CLI.
+        template_vars.update(cli_template_vars)
 
     # Call the copy function.
     t.copy(args.name, args.output, template_vars)
