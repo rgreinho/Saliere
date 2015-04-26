@@ -12,7 +12,14 @@ class Config:
     """
 
     def __init__(self):
-        self.config = None
+        # Initialize the configuration with default values
+        self.config = {
+            'template_path': [
+                'data/template',
+                '../data/template',
+                '/usr/local/share/saliere/templates'
+            ]
+        }
 
     def load_from_string(self, yaml_string):
         """Load the configuration from a YAML string.
@@ -21,7 +28,7 @@ class Config:
         :return:
         """
         try:
-            self.config = yaml.load(yaml_string)
+            self.config.update(yaml.load(yaml_string))
         except Exception as e:
             # Failed yaml loading? Stop here!
             raise ConfigError("Config is not valid yaml ({0}): \n{1}".format(e, yaml_string))
