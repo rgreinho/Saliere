@@ -18,8 +18,8 @@ class Templatizer:
         :param template_path_list: the list of paths where the templates are possibly located
         """
         # Use default template paths if none were specified.
-        self.template_path_list = template_path_list if template_path_list else ['templates',
-                                                                                 '../templates',
+        self.template_path_list = template_path_list if template_path_list else ['data/templates',
+                                                                                 '../data/templates',
                                                                                  '/usr/local/share/saliere/templates']
 
         # Set the type if specified.
@@ -82,7 +82,7 @@ class Templatizer:
                 # Otherwise jinjanize it.
                 jinjanized_content = Jinjanizer.jinjanize(jinja_env, file, template_vars)
 
-                # Create the file with the rendered content
+                # Create the file with the rendered content.
                 with open(dst, mode='w', encoding='utf-8') as jinjanized_file:
                     jinjanized_file.write(jinjanized_content)
 
@@ -107,7 +107,7 @@ class Templatizer:
             except FileNotFoundError:
                 pass
 
-        # Return a list of available templates ordered alphabetically
+        # Return a list of available templates ordered alphabetically.
         return sorted(available_templates)
 
     def locate_template(self, template_type=None):
