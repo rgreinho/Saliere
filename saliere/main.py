@@ -6,7 +6,7 @@ usage:
   saliere [-hlv] [-n NAME] [-c FILE] [-o DIR] [-t TYPE] [--var VAR]
 
 options:
-  -c FILE               specify the template configuration file [default: ~/.saliere/saliere.yml]
+  -c FILE               specify the template configuration file
   -h --help             show this help message and exit
   -l --list             list the available templates
   -n NAME --name=NAME   set the name of your project
@@ -28,7 +28,6 @@ template_path_list = ['data/templates', '../data/templates', '/usr/local/share/s
 def main():
     # Create the parser.
     args = docopt(__doc__, version='Saliere 0.2.0')
-    print(args)
 
     # Create the templatizer object.
     t = Templatizer(template_path_list)
@@ -54,7 +53,8 @@ def main():
 
     # Load the template variables, if any, from the configuration file.
     config = Config()
-    config.load_from_file(args.get('-c'))
+    if args.get('-c'):
+        config.load_from_file(args.get('-c'))
     template_vars = config.get_value(args.get('--type'))
 
     # Load the template variables, if any, from the command line.
