@@ -1,6 +1,15 @@
 CHANGES
 =======
 
+0.2.1
+-----
+
+* Update ChangeLog and AUTHORS
+* Fix main
+
+0.2.0
+-----
+
 * Update ChangeLog and AUTHORS
 * Update packaging
 * Move templates and config to the data directory
