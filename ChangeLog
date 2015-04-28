@@ -1,6 +1,26 @@
 CHANGES
 =======
 
+0.2.1
+-----
+
+* Update ChangeLog and AUTHORS
+* Fix main
+
+0.2.0
+-----
+
+* Update ChangeLog and AUTHORS
+* Update packaging
+* Move templates and config to the data directory
+* Fix Templatizer
+* Initalize Config with default values
+* Use docopt to generate cli parser
+* Update requirements
+* Add .gitignore file to python template
+* Fix the entrypoint
+* Make the CLI vars override the config vars
+* Make the test DRY
 * Add unittests for the Templatizer module
 * Add the ability to get template variables from the CLI
 * Add configuration file support

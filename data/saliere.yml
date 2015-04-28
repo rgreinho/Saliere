@@ -3,8 +3,9 @@ common:
     template_path:
         - 'templates'
         - '../templates'
+        - 'data/templates'
+        - '../data/templates'
         - '/usr/local/share/saliere/templates'
 salt-formula:
     formula_name: my-salt-formula
     today: 2015-02-22
-
