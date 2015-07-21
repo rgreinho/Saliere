@@ -42,7 +42,6 @@ class UnspecifiedError(Exception):
 
 
 class UsageError(UnspecifiedError):
-
     """Exceptions related to use of the library.
 
     Missing files, wrong argument type, etc.
@@ -50,40 +49,31 @@ class UsageError(UnspecifiedError):
 
 
 class NotImplementedError(UsageError):
-
     """The requested feature is not supported / not implemented."""
 
 
 class FileNotFoundError(UsageError):
-
     """The requested (config) file is missing."""
 
 
 class WrongArgumentsError(UsageError):
-
     """Expected arguments type not satisfied."""
 
 
 class ConfigError(UsageError):
-
     """The provided configuration has problems."""
 
-
 class ConnectionError(UnspecifiedError):
-
     """Network communication related errors all inherit this."""
 
 
 class UnreachableError(ConnectionError):
-
     """The requested server is not reachable."""
 
 
 class MissingError(ConnectionError):
-
     """The requested ressource is not to be found on the server."""
 
 
 class BrokenError(ConnectionError):
-
     """Something died on our hands, that the server couldn't digest..."""

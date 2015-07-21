@@ -69,6 +69,10 @@ class Config:
         if not self.config:
             raise ConfigError("No configuration was loaded. Check your configuration file.")
 
+        # Ensure a key was provided.
+        if not key:
+            raise ConfigError("Invalid key: '{}'.".format(key))
+
         # Split the keys.
         key_list = key.split(':')
 
