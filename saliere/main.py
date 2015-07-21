@@ -19,12 +19,31 @@ options:
 import os.path
 
 from docopt import docopt
+import yaml
 
 from saliere.config import Config
 from saliere.templatizer import Templatizer
 
 # Define a list of valid paths to look for the templates
 template_path_list = ['data/templates', '../data/templates', '/usr/local/share/saliere/templates']
+
+
+def load_variables(vars):
+    """
+
+    :param vars:
+    :returns:
+    """
+    # Try to load the vars as YAML.
+    cli_template_vars = yaml.load(vars)
+
+    # If yaml loads a simple string, we assume we must split it.
+    if isinstance(cli_template_vars, str):
+        vars_split = cli_template_vars.split('|')
+        vars_list = [v.split('=', 1) for v in vars_split if '=' in v]
+        return dict(vars_list)
+    else:
+        return cli_template_vars
 
 
 def main():
@@ -56,12 +75,8 @@ def main():
 
     # Load the template variables, if any, from the command line.
     if args.get('--var'):
-        vars_split = args.get('--var').split('|')
-        vars_list = [v.split('=', 1) for v in vars_split if '=' in v]
-        cli_template_vars = dict(vars_list)
-
-        # And override the values from the config file with the values from the CLI.
-        template_vars.update(cli_template_vars)
+        # Load the variables and override the values from the config file with the values from the CLI.
+        template_vars.update(load_variables(args.get('--var')))
 
     # Call the copy function.
     t.copy(args.get('<name>'), os.path.expanduser(args.get('--output')), template_vars)
