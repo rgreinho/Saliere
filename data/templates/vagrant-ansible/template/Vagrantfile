@@ -1,0 +1,52 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    # Box configuration.
+    config.vm.box = "Trusty64"
+    config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/precise/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+
+    # SSH configration.
+    config.ssh.forward_x11 = true
+    config.ssh.forward_agent = true
+
+    # Network configration.
+    {%- for key, value in vm.forwarded_ports.items() %}
+    config.vm.network "forwarded_port", guest: {{ key|e }}, host: {{ value|e }}, auto_correct: true
+    {%- endfor %}
+
+    # Configure the shared folders.
+    {%- for key, value in vm.synced_folders.items() %}
+    config.vm.synced_folder "{{ value|e }}", "{{ key|e }}", :create => true
+    {%- endfor %}
+
+    # Prefer VMware Fusion before VirtualBox
+    config.vm.provider "vmware_fusion"
+    config.vm.provider "virtualbox"
+
+    # Customize the vmware_fusion provider.
+    config.vm.provider "vmware_fusion" do |v|
+        v.box_url = "https://vagrantcloud.com/netsensia/boxes/ubuntu-trusty64"
+        v.vmx["memsize"] = "{{ vm.memory_size }}"
+    end
+
+    # Customize the virtualbox provider.
+    config.vm.provider "virtualbox" do |v|
+        v.memory = "{{ vm.memory_size }}"
+    end
+
+    # Create the box and provision it.
+    config.vm.define "{{ vm.name }}" do |{{ vm.name }}|
+        {{ vm.name }}.vm.hostname = "{{ vm.name }}"
+
+        # Provision the box using an Ansible playbook.
+        {{ vm.name }}.vm.provision "ansible" do |ansible|
+            ansible.playbook = "ansible/provision.yml"
+            ansible.sudo = true
+            ansible.verbose = "vvvv"
+        end
+    end
+end
