@@ -1,15 +1,30 @@
 CHANGES
 =======
 
-0.2.1
+0.3.1
 -----
 
-* Update ChangeLog and AUTHORS
-* Fix main
+* Update ChangeLog
+* Updating packaging information
+* Updating the documentation
+* Update vagrant-ansible template
+* Rename saliere.yml to defaults.yml
+
+0.3.0
+-----
+
+* Update packaging information
+* Update the documentation
+* Add the ability to read YAML variables from the CLI
+* Fix templatizer
+* Add vagrant-ansible template
+* Update .gitignore
 
 0.2.0
 -----
 
+* Update ChangeLog and AUTHORS
+* Fix main
 * Update ChangeLog and AUTHORS
 * Update packaging
 * Move templates and config to the data directory
