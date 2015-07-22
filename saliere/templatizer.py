@@ -51,7 +51,7 @@ class Templatizer:
             raise UsageError("A project type is required.")
 
         # Ensure the template path ends with a "/".
-        template_folder_parent = os.path.abspath(template_path) + "/"
+        template_folder_parent = os.path.abspath(template_path) + "/template/"
 
         # Prepare the output directory.
         output_folder_root = os.path.abspath(output_dir)
@@ -64,14 +64,15 @@ class Templatizer:
             jinja_env = jinja2.Environment(loader=template_loader)
 
             # Recreate the folders with the formula name
-            template_folder_base = root.replace(template_folder_parent, "")
-            formula_folder_name = template_folder_base.replace("template", project_name)
-            formula_folder_path = os.path.join(output_folder_root, formula_folder_name)
-            Templatizer.create_folder(formula_folder_path)
+            skeleton_folder_path = os.path.join(output_folder_root, project_name)
+            current_skeleton_folder_path = (root + '/').replace(template_folder_parent, '')
+            dst_folder = os.path.join(skeleton_folder_path, current_skeleton_folder_path)
+            Templatizer.create_folder(dst_folder)
 
             # List the files.
             for file in files:
-                dst = os.path.join(formula_folder_path, file)
+                dst = os.path.join(skeleton_folder_path, file) if current_skeleton_folder_path == '' else os.path.join(
+                    skeleton_folder_path, current_skeleton_folder_path, file)
 
                 # If there is no variables to replace, simply copy the file.
                 if not template_vars:
@@ -150,6 +151,7 @@ class Jinjanizer:
     """Handle the jinjanization of the templates.
 
     """
+
     @staticmethod
     def jinjanize(jinja_env, template_file, template_vars=None):
         """Renders a Jinja2 template.

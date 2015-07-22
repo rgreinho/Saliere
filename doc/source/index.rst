@@ -6,12 +6,12 @@
 Welcome to Salière's documentation!
 ===================================
 
-Salière is a tool giving devops the ability to easily generate a skeleton for a Salt formula.
+Salière is a tool giving people the ability to easily generate a skeleton for a specific project.
 
 Contents:
 
 .. toctree::
-  :maxdepth: 2
+  :maxdepth: 3
 
   usage
 

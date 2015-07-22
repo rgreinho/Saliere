@@ -4,53 +4,32 @@ Usage
 Synopsis
 --------
 
-Create a skeleton for your formula.
+.. code-block:: bash
 
-Usage::
+    Creates a skeleton for your project.
 
-    $ saliere [options] formula
+    usage:
+      saliere [-hlv]
+      saliere <type> <name> [-c FILE] [-o DIR] [--var VARS]
 
-Mandatory positional arguments::
+    options:
+      -c FILE               specify the template configuration file
+      -h --help             show this help message and exit
+      -l --list             list the available templates
+      -n NAME --name=NAME   set the name of your project
+      -o DIR --output=DIR   specify the output directory [default: ./]
+      -t TYPE --type=TYPE   specify the type of your template or the path of a jinja template
+      -v --version          show the version information
+      --var VARS            define the template variables to use
 
-    formula         the name of the formula
+Templates
+---------
 
-Optional arguments::
+Salière is able to generate skeletons for the following project types:
 
-    -h, --help      show this help message and exit
-    -t TEMPLATE, --template TEMPLATE
-                    specifies the path of a jinja template
-    -o OUTPUT, --output OUTPUT
-                    output directory (default is the current directory)
+.. toctree::
+    :maxdepth: 2
 
-Examples
---------
-
-To simply create a formula in the current directory using the standard template::
-
-$ saliere.py mysql
-
-You can use a specific template with the ``-t`` switch and indicate the path of the template  ::
-
-$ saliere.py mysql -t my-new-amazing-template
-
-You can specify an output directory with the ``-o`` switch followed by the path of the destination::
-
-$ saliere.py mysql -o my-formula_directory
-
-You can also combine them all::
-
-$ saliere.py mysql -t my-new-amazing-template -o my-formula-directory
-
-
-Template
---------
-
-The default template is based on `the official template from Saltstack <https://github.com/saltstack-formulas/template-formula>`_.
-
-If you want to create the a new template, it is recommended to keep the orginal directory structure, and to only modify the content of the template files and the variables you want to replace.
-
-Links:
-------
-
-* **The Salt formula documentation:** http://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html
-* **The Salt Best Practices:** https://salt.readthedocs.org/en/latest/topics/best_practices.html
+    python
+    salt-formula
+    vagrant-ansible
