@@ -1,6 +1,19 @@
 CHANGES
 =======
 
+* Update Changelog
+* Fix vagrant-ansible template
+* Fix packaging information
+
+0.3.3
+-----
+
+
+0.3.2
+-----
+
+* Fix packaging
+
 0.3.1
 -----
 
