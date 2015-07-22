@@ -1,4 +1,4 @@
 ---
-  hosts: {{ vm.name }}
+  hosts: {{ vm_name }}
   roles:
-    - {{ vm.name }}
+    - {{ vm_name }}
