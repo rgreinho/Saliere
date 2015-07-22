@@ -9,7 +9,7 @@ Salière
     :target: https://readthedocs.org/projects/saliere/?badge=latest
     :alt: Documentation Status
 
-Salière is a tool giving devops the ability to easily generate a skeleton for a Salt formula.
+Salière is a tool giving the ability to easily generate a skeleton for your project.
 
 Install
 -------
@@ -36,4 +36,4 @@ And then browse to doc/build/html/index.html
 Contribute
 ----------
 
-The repository is located on Github: https://github.com/TeamLovely/Saliere.
+The repository is located on Github: https://github.com/rgreinho/saliere.

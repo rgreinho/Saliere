@@ -5,6 +5,11 @@ To create a skeleton for a Salt formula::
 
     saliere salt-formula nginx -c ~/salt-formula-template.yml -o ~/salt/formulas
 
+Template variables
+------------------
+
+* ``formula_name``: formula name
+* ``today``: date of the day
 
 Configuration file
 ------------------
