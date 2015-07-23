@@ -20,3 +20,6 @@ vagrant-ansible:
     /opt/scripts: ~/projects/scripts
   ansible_custom_library_paths: library:~/ansible/library
   ansible_custom_role_paths: roles:~/ansible/roles
+  ansible_provisioning_roles:
+    - sbani.liquidprompt
+  ansible_verbosity: ''

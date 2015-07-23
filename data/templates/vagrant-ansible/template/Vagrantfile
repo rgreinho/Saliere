@@ -13,15 +13,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.ssh.forward_x11 = true
     config.ssh.forward_agent = true
 
+    {% if vm_forwarded_ports is defined -%}
     # Network configration.
     {%- for key, value in vm_forwarded_ports.items() %}
-    config.vm.network "forwarded_port", guest: {{ key|e }}, host: {{ value|e }}, auto_correct: true
+    config.vm.network "forwarded_port", guest: {{ key }}, host: {{ value }}, auto_correct: true
     {%- endfor %}
+    {%- endif %}
 
+    {% if vm_forwarded_ports is defined -%}
     # Configure the shared folders.
     {%- for key, value in vm_synced_folders.items() %}
-    config.vm.synced_folder "{{ value|e }}", "{{ key|e }}"
+    config.vm.synced_folder "{{ value }}", "{{ key }}"
     {%- endfor %}
+    {%- endif %}
 
     # Prefer VMware Fusion before VirtualBox
     config.vm.provider "vmware_fusion"
@@ -46,7 +50,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         {{ vm_name }}.vm.provision "ansible" do |ansible|
             ansible.playbook = "ansible/provision.yml"
             ansible.sudo = true
-            ansible.verbose = "vvvv"
+            ansible.verbose = "{{ ansible_verbosity }}"
         end
     end
 end
