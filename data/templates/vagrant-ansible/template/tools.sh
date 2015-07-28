@@ -1,35 +1,56 @@
 #!/bin/bash
 
-VM={{ vm_name }}
-VERBOSITY={{ ansible_verbosity }}
+# Define variables.
+VMS="
+{%- for entry in vm.guests -%}
+    {{ entry.name }}{{" "}}
+{%- endfor -%}
+"
 PLAYBOOK=ansible/provision.yml
-PLAYBOOK_COMMAND="ansible-playbook -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory --private-key=.vagrant/machines/${VM}/virtualbox/private_key -u vagrant -b ${PLAYBOOK} ${VERBOSITY}"
+VAGRANT_INVENTORY=.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
+VAGRANT_PROVIDER=virtualbox
+{% if  ansible_verbosity is defined -%}
+VERBOSITY={{ ansible_verbosity }}
+{%- endif %}
 
-if [ $# -lt 1 ]
-then
-        echo "Usage : $0 (provision | idempotency)"
-        exit
+function usage() {
+    echo "Usage : $0 (provision | idempotency) [VM...]"
+    exit
+}
+
+# Ensure the command was provided.
+if [ $# -lt 1 ]; then
+    usage
+fi
+
+# Check whether we want to run the command against specific VMs only.
+if [ ! -z $2 ]; then
+    VMS=$2
 fi
 
 case "$1" in
 provision)
-    echo "---------------------"
-    echo " Provisioning the VM "
-    echo "---------------------"
-    ${PLAYBOOK_COMMAND}
+    echo "-------------------------------"
+    echo " Provisioning the VM(s) ${VMS} "
+    echo "-------------------------------"
+    for VM in ${VMS}; do
+        ansible-playbook -i ${VAGRANT_INVENTORY} --private-key=.vagrant/machines/${VM}/${VAGRANT_PROVIDER}/private_key -u vagrant -b ${PLAYBOOK} ${VERBOSITY} --limit ${VM}
+    done
     ;;
 idempotency)
-    echo "----------------------------------"
-    echo " Creating and provisioning the VM"
-    echo "----------------------------------"
-    vagrant destroy -f ${VM}
-    vagrant up ${VM}
-    echo "------------------------------------------------"
-    echo " Replaying the playbook to test for idempotency"
-    echo "------------------------------------------------"
-    ${PLAYBOOK_COMMAND} | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
+    echo "-------------------------------------------"
+    echo " Creating and provisioning the VM(s) ${VMS}"
+    echo "-------------------------------------------"
+    vagrant destroy -f ${VMS}
+    vagrant up ${VMS}
+    echo "----------------------------------------------------------"
+    echo " Replaying the playbook to test for idempotency for ${VMS}"
+    echo "----------------------------------------------------------"
+    for VM in ${VMS}; do
+        ansible-playbook -i ${VAGRANT_INVENTORY} --private-key=.vagrant/machines/${VM}/${VAGRANT_PROVIDER}/private_key -u vagrant -b ${PLAYBOOK} ${VERBOSITY} --limit ${VM} | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
+    done
     ;;
 *)
-    echo "Usage : $0 (provision | idempotency)"
+    usage
    ;;
 esac

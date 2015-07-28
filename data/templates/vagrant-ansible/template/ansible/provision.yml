@@ -1,18 +1,32 @@
 ---
-- hosts: {{ vm_name }}
-
-  {% if ansible_variables is defined -%}
+{%- for group, params in ansible.groups.items() %}
+- hosts: {{ group }}
+  {% if params.vars is defined or ansible.groups_common.vars is defined -%}
   vars:
-  {%- for key, value in ansible_variables.items() %}
+  {%- if ansible.groups_common.vars is defined -%}
+  {%- for key, value in ansible.groups_common.vars.items() %}
     {{ key }}: {{ value }}
   {%- endfor %}
   {%- endif %}
-
-  {% if ansible_provisioning_roles is defined -%}
+  {%- if params.vars is defined -%}
+  {%- for key, value in params.vars.items() %}
+    {{ key }}: {{ value }}
+  {%- endfor %}
+  {%- endif %}
+  {% endif %}
+  {% if params.provisioning_roles is defined or ansible.groups_common.provisioning_roles is defined -%}
   roles:
-  {%-for role in ansible_provisioning_roles %}
+  {%- if ansible.groups_common.provisioning_roles is defined -%}
+  {%- for role in ansible.groups_common.provisioning_roles %}
+    - {{ role }}
+  {%- endfor %}
+  {%- endif %}
+  {%- if params.provisioning_roles is defined -%}
+  {%-for role in params.provisioning_roles %}
     - {{ role }}
   {%- endfor %}
   {%- else %}
-    - {{ vm_name }}
-  {% endif %}
+    - {{ group }}
+  {%- endif %}
+  {%- endif %}
+{% endfor %}

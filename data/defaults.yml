@@ -9,17 +9,18 @@ common:
 salt-formula:
   formula_name: my-salt-formula
   today: 2015-02-22
+          - jenkins_job_builder
 vagrant-ansible:
-  vm_name: my_vm
-  vm_memory_size: 2048
-  vm_forwarded_ports:
-    8000: 8000
-    8888: 8888
-  vm_synced_folders:
-    /opt/tools: ~/projects/tools
-    /opt/scripts: ~/projects/scripts
-  ansible_custom_library_paths: library:~/ansible/library
-  ansible_custom_role_paths: roles:~/ansible/roles
-  ansible_provisioning_roles:
-    - sbani.liquidprompt
-  ansible_verbosity: ''
+  ansible:
+    custom_library_paths: library:~/projects/ansible-systems/library
+    custom_role_paths: roles:~/projects/ansible/roles:~/projects/ansible-systems/roles
+    groups_common:
+      vars:
+        liquidprompt_apply_all_users: True
+      provisioning_roles:
+        - sbani.liquidprompt
+  vm:
+    memory_size: 2048
+    synced_folders:
+      ~/projects/devstack: /opt/devstack
+      ~/projects/engineering/scripts: /opt/scripts

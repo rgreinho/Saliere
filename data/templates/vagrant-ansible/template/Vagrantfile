@@ -13,19 +13,25 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.ssh.forward_x11 = true
     config.ssh.forward_agent = true
 
-    {% if vm_forwarded_ports is defined -%}
     # Network configration.
-    {%- for key, value in vm_forwarded_ports.items() %}
-    config.vm.network "forwarded_port", guest: {{ key }}, host: {{ value }}, auto_correct: true
+    config.vm.network "private_network", type: "dhcp"
+
+    {% if vm.synced_folders is defined -%}
+    # Configure the shared folders.
+    {%- for key, value in vm.synced_folders.items() %}
+    config.vm.synced_folder "{{ key }}", "{{ value }}"
     {%- endfor %}
     {%- endif %}
 
-    {% if vm_forwarded_ports is defined -%}
-    # Configure the shared folders.
-    {%- for key, value in vm_synced_folders.items() %}
-    config.vm.synced_folder "{{ value }}", "{{ key }}"
-    {%- endfor %}
-    {%- endif %}
+    # Use the cachier plugin if available.
+    if Vagrant.has_plugin?("vagrant-cachier")
+        config.cache.scope = :box
+    end
+
+    # Use the landrush plugin if available.
+    if Vagrant.has_plugin?("landrush")
+        config.landrush.enabled = true
+    end
 
     # Prefer VMware Fusion before VirtualBox
     config.vm.provider "vmware_fusion"
@@ -34,23 +40,30 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Customize the vmware_fusion provider.
     config.vm.provider "vmware_fusion" do |v|
         v.box_url = "https://vagrantcloud.com/netsensia/boxes/ubuntu-trusty64"
-        v.vmx["memsize"] = "{{ vm_memory_size }}"
+        v.vmx["memsize"] = "{{ vm.memory_size }}"
     end
 
     # Customize the virtualbox provider.
     config.vm.provider "virtualbox" do |v|
-        v.memory = "{{ vm_memory_size }}"
+        v.memory = "{{ vm.memory_size }}"
     end
 
+    {%- for entry in vm.guests %}
     # Create the box and provision it.
-    config.vm.define "{{ vm_name }}" do |{{ vm_name }}|
-        {{ vm_name }}.vm.hostname = "{{ vm_name }}"
-
+    config.vm.define "{{ entry.name }}" do |{{ entry.name }}|
+        {{ entry.name }}.vm.hostname = "{{ entry.name }}.vagrant.dev"
+        {% if entry.forwarded_ports is defined %}
+        # Configure the port forwarding.
+        {%- for key, value in entry.forwarded_ports.items() %}
+        config.vm.network "forwarded_port", host: {{ key }}, guest: {{ value }}, auto_correct: true
+        {%- endfor %}
+        {% endif %}
         # Provision the box using an Ansible playbook.
-        {{ vm_name }}.vm.provision "ansible" do |ansible|
+        {{ entry.name }}.vm.provision "ansible" do |ansible|
             ansible.playbook = "ansible/provision.yml"
             ansible.sudo = true
             ansible.verbose = "{{ ansible_verbosity }}"
         end
     end
+    {%- endfor %}
 end
