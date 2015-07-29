@@ -1,35 +1,4 @@
-# -*- coding: utf-8 -*-
-# Copyright (c) 2014 Docker.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-# implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-docker_registry.core.exceptions
-~~~~~~~~~~~~~~~~~~~~~
-
-Provide docker_registry exceptions to be used consistently in the drivers
-and registry.
-"""
-
-__all__ = [
-    "UnspecifiedError",
-    "UsageError",
-    "NotImplementedError", "FileNotFoundError", "WrongArgumentsError",
-    "ConfigError",
-    "ConnectionError",
-    "UnreachableError", "MissingError", "BrokenError"
-]
+import copy
 
 
 class UnspecifiedError(Exception):
@@ -63,6 +32,7 @@ class WrongArgumentsError(UsageError):
 class ConfigError(UsageError):
     """The provided configuration has problems."""
 
+
 class ConnectionError(UnspecifiedError):
     """Network communication related errors all inherit this."""
 
@@ -77,3 +47,44 @@ class MissingError(ConnectionError):
 
 class BrokenError(ConnectionError):
     """Something died on our hands, that the server couldn't digest..."""
+
+
+def merge_dicts(a, b, raise_conflicts=False, path=None):
+    """
+    Merges the values of B into A.
+
+    If the raise_conflicts flag is set to True, a LookupError will be raised if the keys are conflicting.
+
+    :param a: the target dictionary
+    :param b: the dictionary to import
+    :param raise_conflicts: flag to raise an exception if two keys are colliding
+    :param path: the dictionary path. Used to show where the keys are conflicting when an exception is raised.
+    :return: The dictionary A with the values of the dictionary B merged into it.
+    """
+    # Set path.
+    if path is None:
+        path = []
+
+    # Go through the keys of the 2 dictionaries.
+    for key in b:
+        # If the key exist in both dictionary, check whether we must update or not.
+        if key in a:
+            # Dig deeper for keys that have dictionary values.
+            if isinstance(a[key], dict) and isinstance(b[key], dict):
+                merge_dicts(a[key], b[key], raise_conflicts=raise_conflicts, path=(path + [str(key)]))
+
+            # Skip the identical values.
+            elif a[key] == b[key]:
+                pass
+            else:
+                # Otherwise raise an error if the same keys have different values.
+                if raise_conflicts:
+                    raise LookupError("Conflict at '{path}'".format(path='.'.join(path + [str(key)])))
+
+                # Or replace the value of A with the value of B.
+                a[key] = b[key]
+        else:
+            # If the key does not exist in A, import it.
+            a[key] = copy.deepcopy(b[key]) if isinstance(b[key], dict) else b[key]
+
+    return a
