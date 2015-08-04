@@ -19,7 +19,7 @@ class Config:
                 '../data/template',
                 '/usr/local/share/saliere/templates'
             ]
-        }
+        }  # yapf: disable
 
     def load_from_string(self, yaml_string):
         """Load the configuration from a YAML string.

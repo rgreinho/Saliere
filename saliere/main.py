@@ -81,5 +81,6 @@ def main():
     # Call the copy function.
     t.copy(args.get('<name>'), os.path.expanduser(args.get('--output')), template_vars)
 
+
 if __name__ == '__main__':
     main()

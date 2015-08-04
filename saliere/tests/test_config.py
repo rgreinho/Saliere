@@ -14,10 +14,10 @@ class TestConfig(unittest.TestCase):
 
     def setUp(self):
         self.c = Config()
-        self. c.load_from_string(self.config_string)
+        self.c.load_from_string(self.config_string)
 
     def test_key_lookup_00(self):
-        value = self. c.get_value("common:testkey")
+        value = self.c.get_value("common:testkey")
         self.assertEqual(value, "test value")
 
     def test_key_lookup_01(self):

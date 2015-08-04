@@ -18,8 +18,7 @@ class Templatizer:
         :param template_path_list: the list of paths where the templates are possibly located
         """
         # Use default template paths if none were specified.
-        self.template_path_list = template_path_list if template_path_list else ['data/templates',
-                                                                                 '../data/templates',
+        self.template_path_list = template_path_list if template_path_list else ['data/templates', '../data/templates',
                                                                                  '/usr/local/share/saliere/templates']
 
         # Set the type if specified.
