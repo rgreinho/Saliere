@@ -47,7 +47,7 @@ idempotency)
     echo " Replaying the playbook to test for idempotency for ${VMS}"
     echo "----------------------------------------------------------"
     for VM in ${VMS}; do
-        ansible-playbook -i ${VAGRANT_INVENTORY} --private-key=.vagrant/machines/${VM}/${VAGRANT_PROVIDER}/private_key -u vagrant -b ${PLAYBOOK} ${VERBOSITY} --limit ${VM} | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
+        ansible-playbook -i ${VAGRANT_INVENTORY} --private-key=.vagrant/machines/${VM}/${VAGRANT_PROVIDER}/private_key -u vagrant -b ${PLAYBOOK} ${VERBOSITY} --limit ${VM} | grep -q 'changed=0.*failed=0' && (echo "${VM} idempotence test: pass" && exit 0) || (echo "${VM} idempotence test: fail" && exit 1)
     done
     ;;
 *)
