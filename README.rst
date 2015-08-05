@@ -37,3 +37,14 @@ Contribute
 ----------
 
 The repository is located on Github: https://github.com/rgreinho/saliere.
+
+Formatting
+^^^^^^^^^^
+
+For formating the files properly, please use YAPF (https://github.com/google/yapf).
+
+In the root directory of the project, run the following command:
+
+.. code-block:: bash
+
+    yapf -r -i saliere/
