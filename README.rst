@@ -1,9 +1,9 @@
 Salière
 =======
 
-.. image:: https://requires.io/github/TeamLovely/Saliere/requirements.svg?branch=master
-    :target: https://requires.io/github/TeamLovely/Saliere/requirements/?branch=master
-    :alt: Requirements Status
+.. image:: https://requires.io/github/rgreinho/saliere/requirements.svg?branch=master
+     :target: https://requires.io/github/rgreinho/saliere/requirements/?branch=master
+     :alt: Requirements Status
 
 .. image:: https://readthedocs.org/projects/saliere/badge/?version=latest
     :target: https://readthedocs.org/projects/saliere/?badge=latest
