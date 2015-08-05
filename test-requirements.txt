@@ -1,3 +1,4 @@
 pbr
 Sphinx==1.3.1
 wheel
+yapf
