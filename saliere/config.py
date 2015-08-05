@@ -13,13 +13,7 @@ class Config:
 
     def __init__(self):
         # Initialize the configuration with default values
-        self.config = {
-            'template_path': [
-                'data/template',
-                '../data/template',
-                '/usr/local/share/saliere/templates'
-            ]
-        }  # yapf: disable
+        self.config = {'template_path': ['data/template', '../data/template', '/usr/local/share/saliere/templates']}
 
     def load_from_string(self, yaml_string):
         """Load the configuration from a YAML string.

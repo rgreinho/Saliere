@@ -2,7 +2,6 @@ import copy
 
 
 class UnspecifiedError(Exception):
-
     """Base class for all exceptions in docker_registry."""
 
     def __init__(self, *args, **kwargs):
