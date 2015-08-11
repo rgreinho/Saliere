@@ -60,11 +60,15 @@ class Templatizer:
 
             # Prepare the jinja environment.
             template_loader = jinja2.FileSystemLoader(root)
-            jinja_env = jinja2.Environment(loader=template_loader)
+            jinja_env = jinja2.Environment(loader=template_loader, keep_trailing_newline=True)
 
             # Recreate the folders with the formula name
             skeleton_folder_path = os.path.join(output_folder_root, project_name)
             current_skeleton_folder_path = (root + '/').replace(template_folder_parent, '')
+
+            # Replace any subdirectory named "template" by the project name.
+            if "template/" in current_skeleton_folder_path:
+                current_skeleton_folder_path = current_skeleton_folder_path.replace("template", project_name)
             dst_folder = os.path.join(skeleton_folder_path, current_skeleton_folder_path)
             Templatizer.create_folder(dst_folder)
 

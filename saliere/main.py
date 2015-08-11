@@ -73,8 +73,9 @@ def main():
     config = Config()
     if args.get('-c'):
         config.load_from_file(args.get('-c'))
-    template_vars = config.get_value(args.get('<type>'))
+    template_vars = config.get_value(args.get('<type>'), {})
 
+    # import pdb; pdb.set_trace()
     # Load the template variables, if any, from the command line.
     if args.get('--var'):
         # Load the variables and override the values from the config file with the values from the CLI.
