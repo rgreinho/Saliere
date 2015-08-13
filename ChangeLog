@@ -1,6 +1,25 @@
 CHANGES
 =======
 
+* Make the template more DRY
+* Update python template documentation
+* Improve Python template
+* Colorize the Vagrant-Ansible template
+* Update the requires.io badge
+* Reformat source code files
+* Update the documentation
+* Update the requirements.txt file
+* Add YAPF to the test-requirements.txt file
+* Fix docopt
+* Reformat code using YAPF
+* Improve tools.sh
+* Better vagrant ansible template
+* Add core functions to merge two dictionaries
+* Improve vagrant-ansible template
+
+0.3.4
+-----
+
 * Update Changelog
 * Fix vagrant-ansible template
 * Fix packaging information
