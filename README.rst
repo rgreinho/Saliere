@@ -16,7 +16,7 @@ Install
 
 Using pip::
 
-    $ pip install saliere
+    pip install saliere
 
 Read the docs
 -------------
@@ -28,8 +28,8 @@ Build the docs
 
 To build the documentation::
 
-    $ pip install sphinx
-    $ python setup.py build_sphinx
+    pip install sphinx
+    python setup.py build_sphinx
 
 And then browse to doc/build/html/index.html
 
